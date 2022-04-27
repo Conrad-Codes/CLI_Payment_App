@@ -22,9 +22,16 @@ public class TEnmoController {
     @Autowired
     TransactionDao transactionDao;
 
-    @RequestMapping(path = "balance/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/balance/{user_id}", method = RequestMethod.GET)
     private BigDecimal getBalance(@PathVariable Long user_id){
-        return accountDao.checkBalance(user_id.intValue());
+        System.out.println("DEBUG: ");
+        System.out.println(user_id);
+//        try{
+        return accountDao.checkBalance(user_id);
+//        }catch (NullPointerException e){
+//            return new BigDecimal("9999");
+//        }
     }
+
 
 }

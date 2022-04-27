@@ -47,16 +47,17 @@ public class TEnmoService {
         return entity;
     }
 
-    public BigDecimal getBalance(Long id) {
+    public BigDecimal getBalance(Long user_id) {
 
         System.out.println("DEBUG: ");
-        System.out.println(id);
+        System.out.println(user_id);
+        System.out.println(authToken);
 
         BigDecimal balance = new BigDecimal("0.00");
 
         try {
             balance = restTemplate.exchange(
-                    API_BASE_URL + "balance/" + id,
+                    API_BASE_URL + "balance/" + user_id,
                     HttpMethod.GET,
                     makeAuthEntity(),
                     BigDecimal.class
