@@ -21,9 +21,6 @@ public class TEnmoService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     private String authToken = null;
-    private User user = new User();
-    private AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-    private Principal principal;
 
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
@@ -48,10 +45,6 @@ public class TEnmoService {
     }
 
     public BigDecimal getBalance(Long user_id) {
-
-        System.out.println("DEBUG: ");
-        System.out.println(user_id);
-        System.out.println(authToken);
 
         BigDecimal balance = new BigDecimal("0.00");
 

@@ -14,26 +14,21 @@ public class JdbcAccountDao implements AccountDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcAccountDao(DataSource ds) {
-        this.jdbcTemplate = new JdbcTemplate(ds);
+    public JdbcAccountDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
     public BigDecimal checkBalance(Long user_id) {
         BigDecimal balance = new BigDecimal("0.00");
 
-        String sql = "SELECT balance FROM account WHERE user_id = ?";
-            SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, user_id);
+        String sql = "SELECT * FROM account WHERE user_id = ?";
+        SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, user_id);
 
-        System.out.println("DEBUG:: ");
+        if (results.next()) {
+            balance = results.getBigDecimal("balance");
+        }
 
-        try {
-            if (results.next()) {
-                balance = results.getBigDecimal("balance");
-            }
-        }catch (NullPointerException e){
-             balance = new BigDecimal("1234");
-            }
         return balance;
     }
 
