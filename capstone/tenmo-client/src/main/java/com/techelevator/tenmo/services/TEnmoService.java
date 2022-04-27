@@ -14,6 +14,10 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TEnmoService {
 
@@ -60,6 +64,23 @@ public class TEnmoService {
         }
 
         return balance;
+    }
+
+    public List<User> listUsers(Long user_id) {
+
+        List<User> users = new ArrayList<>();
+        Map usersMap = new HashMap<>();
+
+        try {
+            usersMap = restTemplate.exchange(
+                    API_BASE_URL + "users",
+                      HttpMethod.GET,
+                    makeAuthEntity(),
+                    Map.class
+                    ).getBody();
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            e.printStackTrace();
+        }
     }
 
 }

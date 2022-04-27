@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @PreAuthorize("isAuthenticated()")
 @RestController
@@ -22,16 +23,14 @@ public class TEnmoController {
     @Autowired
     TransactionDao transactionDao;
 
-//    public TEnmoController(AccountDao accountDao){
-//        this.accountDao = accountDao;
-//    }
-
-
     @RequestMapping(path = "/balance/{user_id}", method = RequestMethod.GET)
     public BigDecimal getBalance(@PathVariable Long user_id){
         return accountDao.checkBalance(user_id);
-
     }
 
+    @RequestMapping(path = "/users", method = RequestMethod.GET)
+    public Map<Long, String> listUsers() {
+        return accountDao.listUsers();
+    }
 
 }
