@@ -23,8 +23,8 @@ public class TEnmoController {
     TransactionDao transactionDao;
 
     @RequestMapping(path = "balance/{id}", method = RequestMethod.GET)
-    private BigDecimal getBalance(@PathVariable long userId){
-        return accountDao.checkBalance(userId);
+    private BigDecimal getBalance(@PathVariable Long user_id){
+        return accountDao.checkBalance(user_id.intValue());
     }
 
 }

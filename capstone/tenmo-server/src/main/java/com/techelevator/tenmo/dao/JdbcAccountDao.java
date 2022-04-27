@@ -18,7 +18,7 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public BigDecimal checkBalance(Long userID) {
+    public BigDecimal checkBalance(int userID) {
         String sql = "SELECT balance FROM account WHERE user_id = ?";
         SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, userID);
 

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public interface AccountDao {
 
-    BigDecimal checkBalance(Long userID);
+    BigDecimal checkBalance(int userID);
 
 
 }
