@@ -14,10 +14,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TEnmoService {
 
@@ -69,7 +66,7 @@ public class TEnmoService {
     public List<User> listUsers(Long user_id) {
 
         List<User> users = new ArrayList<>();
-        Map usersMap = new HashMap<>();
+        Map<Long, String> usersMap = new HashMap<>();
 
         try {
             usersMap = restTemplate.exchange(
@@ -81,6 +78,20 @@ public class TEnmoService {
         } catch (RestClientResponseException | ResourceAccessException e) {
             e.printStackTrace();
         }
+        for (Map.Entry<Long, String> entry : usersMap.entrySet()){
+            System.out.println("DEBUG");
+            if (entry.getKey() != user_id){
+                System.out.println("CHECK");
+                User user = new User();
+                System.out.println("CHECK2");
+                user.setUsername(entry.getValue());
+                user.setId(entry.getKey());
+
+
+                users.add(user);
+            }
+        }
+        return users;
     }
 
 }

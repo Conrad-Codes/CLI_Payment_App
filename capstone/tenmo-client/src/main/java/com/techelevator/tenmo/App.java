@@ -103,7 +103,7 @@ public class App {
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
+        System.out.println(tEnmoService.listUsers(currentUser.getUser().getId()));
 		
 	}
 
