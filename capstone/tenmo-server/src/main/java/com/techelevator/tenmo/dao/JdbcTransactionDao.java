@@ -11,9 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class JdbcTransactionDao implements TransactionDao{
+public class JdbcTransactionDao implements TransactionDao {
 
     private JdbcTemplate jdbcTemplate;
+
+    public JdbcTransactionDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     @Autowired
     private AccountDao accountDao;
 
@@ -27,18 +32,25 @@ public class JdbcTransactionDao implements TransactionDao{
         BigDecimal senderBalance = accountDao.checkBalance(sender);
         BigDecimal receiverBalance = accountDao.checkBalance(receiver);
 
-        if (senderBalance.compareTo(amount) >= 0) {
-            senderBalance.subtract(amount);
-            receiverBalance.add(amount);
-        } else {
+        if (!(senderBalance.compareTo(amount) >= 0)) {
             return "Insufficient funds.";
         }
 
-        String sql = "UPDATE account SET balance = ? WHERE user_id = ?;";
-        jdbcTemplate.update(sql, senderBalance, sender);
-        jdbcTemplate.update(sql, receiverBalance, receiver);
+        senderBalance = senderBalance.subtract(amount);
+        receiverBalance = receiverBalance.add(amount);
+
+        System.out.println(senderBalance);
+        System.out.println(receiverBalance);
+
+        String sql = "START TRANSACTION;" +
+                "UPDATE account SET balance = ? WHERE user_id = ?;" +
+                "UPDATE account SET balance = ? WHERE user_id = ?; " +
+                "COMMIT;";
+
+        jdbcTemplate.update(sql, senderBalance, sender, receiverBalance, receiver);
+
+
 
         return "\nTransaction complete.\nNew balance: " + senderBalance;
     }
-
 }

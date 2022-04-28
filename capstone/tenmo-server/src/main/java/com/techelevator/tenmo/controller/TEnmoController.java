@@ -7,6 +7,7 @@ import com.techelevator.tenmo.model.TransactionDTO;
 import com.techelevator.tenmo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,7 +43,7 @@ public class TEnmoController {
     }
 
     @RequestMapping(path = "/transfer", method = RequestMethod.POST)
-    public String transfer(@Valid @RequestBody TransactionDTO transactionDTO, Principal principal) {
+    public String transfer(Principal principal,@Valid @RequestBody TransactionDTO transactionDTO) {
         return transactionDao.transfer(transactionDTO.getAmount(), transactionDTO.getReceiverID(), userDao.findIdByUsername(principal.getName()));
     }
 

@@ -2,10 +2,13 @@ package com.techelevator.tenmo.services;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.TransactionDTO;
 import com.techelevator.tenmo.model.User;
+import org.apiguardian.api.API;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
@@ -27,14 +30,13 @@ public class TEnmoService {
         this.authToken = authToken;
     }
 
-//    private HttpEntity<User> makeUserEntity(User user) {
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setBearerAuth(authToken);
-//        HttpEntity<User> entity = new HttpEntity<>(User, headers);
-//
-//        return entity;
-//    }
+    private HttpEntity<TransactionDTO> makeTransactionEntity(TransactionDTO transactionDTO) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(authToken);
+        HttpEntity<TransactionDTO> entity = new HttpEntity<>(transactionDTO, headers);
+
+        return entity;
+    }
 
     private HttpEntity<Void> makeAuthEntity() {
 
@@ -75,5 +77,23 @@ public class TEnmoService {
         ).getBody();
 
         return users;
+    }
+
+    public String transfer(TransactionDTO transactionDTO){
+        String response = "";
+
+        try{
+            response = restTemplate.exchange(
+                    API_BASE_URL + "transfer",
+                    HttpMethod.POST,
+                    makeTransactionEntity(transactionDTO),
+                    String.class
+            ).getBody();
+//        }catch(MethodArgumentNotValidException e) {
+//
+        }catch(RestClientResponseException | ResourceAccessException e){
+            System.out.println("ERROR!");
+        }
+        return response;
     }
 }

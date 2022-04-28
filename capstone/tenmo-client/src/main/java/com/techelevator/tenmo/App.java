@@ -1,14 +1,17 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.TransactionDTO;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TEnmoService;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class App {
 
@@ -107,15 +110,48 @@ public class App {
 	}
 
 	private void sendBucks() {
-//        System.out.println(tEnmoService.listUsers());
 
         User[] displayedUsers = null;
         displayedUsers = tEnmoService.listUsers();
 
-        for (User user : displayedUsers){
-            System.out.println(user);
-        }
-//        Scanner scanner = new Scanner()
+        Scanner scanner = new Scanner(System.in);
+        int receiverID = 0;
+        BigDecimal amount = new BigDecimal("0.00");
+        boolean keepRunning = true;
+        String response = "";
+        System.out.println("\n");
+        do{
+            try {
+
+                for (User user : displayedUsers){
+                    System.out.println(user);
+                }
+
+                System.out.println("Please enter the user ID of the receiver: ");
+                receiverID = Integer.parseInt(scanner.nextLine());
+
+                System.out.println("Please enter the amount to transfer: ");
+                amount = new BigDecimal(scanner.nextLine());
+
+                for (User user : displayedUsers){
+                    if (user.getId() == receiverID && amount.compareTo(new BigDecimal ("0.00")) >0){
+                        TransactionDTO transactionDTO = new TransactionDTO();
+                        transactionDTO.setAmount(amount);
+                        transactionDTO.setReceiverID(receiverID);
+
+                        response = tEnmoService.transfer(transactionDTO);
+                        keepRunning = false;
+                    }
+                }
+                if (response.equals("")) {
+                    System.out.println("\nInvalid input, please try again \n");
+                }else{
+                    System.out.println(response);
+                }
+            }catch( NumberFormatException e){
+                System.out.println("\nInvalid input, please try again\n");
+            }
+        }while(keepRunning);
 	}
 
 	private void requestBucks() {
