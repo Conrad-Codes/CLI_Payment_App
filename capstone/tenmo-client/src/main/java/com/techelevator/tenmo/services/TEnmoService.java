@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.temporal.Temporal;
 import java.util.*;
-import java.util.function.Predicate;
 
 public class TEnmoService {
 
@@ -69,33 +68,29 @@ public class TEnmoService {
         List<User> displayedUsers = new ArrayList<>();
 
         users = restTemplate.exchange(
-                API_BASE_URL + "users",
-                HttpMethod.GET,
-                makeAuthEntity(),
-                List.class
+          API_BASE_URL + "users",
+          HttpMethod.GET,
+          makeAuthEntity(),
+          List.class
         ).getBody();
-
-        //        System.out.println(users.get(0).getId().longValue());
+//        System.out.println(users.get(0).getId().longValue());
 //        System.out.println(user_id);
+    users.removeIf(user_id <);
+        for (int i =0 ; i< users.size();i++){
+            System.out.println("DEBUG");
+//            System.out.println(currentUser);
+//            System.out.println(user);
+            if (!users.get(i).getId().equals(user_id)){
+                User user = new User();
+                user.setId(users.get(i).getId());
+                user.setUsername(users.get(i).getUsername());
 
-//        Predicate<User> condition = user -> user.getId().equals(user_id);
-//        users.removeIf(condition);
+                displayedUsers.add(user);
+            }
 
-//        for (int i = 0; i < users.size(); i++) {
-//            System.out.println("DEBUG");
-////            System.out.println(currentUser);
-////            System.out.println(user);
-//            if (!users.get(i).getId().equals(user_id)) {
-//                User user = new User();
-//                user.setId(users.get(i).getId());
-//                user.setUsername(users.get(i).getUsername());
-//
-//                displayedUsers.add(user);
-//            }
+        }
 
-//        }
-
-        return users;
+        return displayedUsers;
     }
 
 }
