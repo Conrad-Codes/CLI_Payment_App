@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface TransactionDao {
 
-    String transfer(BigDecimal amount, Long sender, Long receiver);
+    String transfer(BigDecimal amount, int sender, int receiver);
 
 }

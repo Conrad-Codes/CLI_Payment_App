@@ -3,14 +3,13 @@ package com.techelevator.tenmo.controller;
 import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.TransactionDao;
 import com.techelevator.tenmo.dao.UserDao;
+import com.techelevator.tenmo.model.TransactionDTO;
 import com.techelevator.tenmo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
@@ -28,6 +27,8 @@ public class TEnmoController {
     @Autowired
     TransactionDao transactionDao;
 
+
+
     @RequestMapping(path = "/balance", method = RequestMethod.GET)
     public BigDecimal getBalance(Principal principal) {
 
@@ -38,6 +39,11 @@ public class TEnmoController {
     @RequestMapping(path = "/users", method = RequestMethod.GET)
     public List<User> listUsers(Principal principal) {
         return accountDao.listUsers(userDao.findIdByUsername(principal.getName()));
+    }
+
+    @RequestMapping(path = "/transfer", method = RequestMethod.POST)
+    public String transfer(@Valid @RequestBody TransactionDTO transactionDTO, Principal principal) {
+        return transactionDao.transfer(transactionDTO.getAmount(), transactionDTO.getReceiverID(), userDao.findIdByUsername(principal.getName()));
     }
 
 }
