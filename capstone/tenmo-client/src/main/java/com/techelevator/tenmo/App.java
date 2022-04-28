@@ -141,6 +141,7 @@ public class App {
                         TransactionDTO transactionDTO = new TransactionDTO();
                         transactionDTO.setAmount(amount);
                         transactionDTO.setReceiverID(receiverID);
+                        transactionDTO.setTransfer_type("Send");
 
                         //Set response message to server response
                         response = tEnmoService.transfer(transactionDTO);

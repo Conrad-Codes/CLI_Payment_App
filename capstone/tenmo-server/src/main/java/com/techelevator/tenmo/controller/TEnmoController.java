@@ -44,6 +44,6 @@ public class TEnmoController {
 
     @RequestMapping(path = "/transfer", method = RequestMethod.POST)
     public String transfer(Principal principal,@Valid @RequestBody TransactionDTO transactionDTO) {
-        return transactionDao.transfer(transactionDTO.getAmount(), transactionDTO.getReceiverID(), userDao.findIdByUsername(principal.getName()));
+        return transactionDao.transfer(transactionDTO.getAmount(), transactionDTO.getReceiverID(), userDao.findIdByUsername(principal.getName()), transactionDTO.getTransfer_type());
     }
 }

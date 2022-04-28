@@ -11,6 +11,9 @@ public class TransactionDTO {
     private UserDao userDao;
     private Principal principal;
 
+    @NotEmpty
+    private String transfer_type;
+
     @Min(value = 1, message = "Amount must be greater than 0")
     @Positive
     private BigDecimal amount;
@@ -32,5 +35,13 @@ public class TransactionDTO {
 
     public void setReceiverID(int receiverID) {
         this.receiverID = receiverID;
+    }
+
+    public String getTransfer_type() {
+        return transfer_type;
+    }
+
+    public void setTransfer_type(String transfer_type) {
+        this.transfer_type = transfer_type;
     }
 }

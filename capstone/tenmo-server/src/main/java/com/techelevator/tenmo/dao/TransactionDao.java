@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface TransactionDao {
 
-    String transfer(BigDecimal amount, int sender, int receiver);
+    String transfer(BigDecimal amount, int sender, int receiver, String transfer_type);
 
-    void logTransfer(BigDecimal amount, int sender, int receiver);
+    void logTransfer(BigDecimal amount, int sender, int receiver, String transfer_type, String transfer_status_desc);
 
 }
