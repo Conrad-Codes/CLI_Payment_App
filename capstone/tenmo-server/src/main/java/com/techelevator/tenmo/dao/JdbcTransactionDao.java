@@ -39,9 +39,6 @@ public class JdbcTransactionDao implements TransactionDao {
         senderBalance = senderBalance.subtract(amount);
         receiverBalance = receiverBalance.add(amount);
 
-        System.out.println(senderBalance);
-        System.out.println(receiverBalance);
-
         String sql = "START TRANSACTION;" +
                 "UPDATE account SET balance = ? WHERE user_id = ?;" +
                 "UPDATE account SET balance = ? WHERE user_id = ?; " +
@@ -52,5 +49,11 @@ public class JdbcTransactionDao implements TransactionDao {
 
 
         return "\nTransaction complete.\nNew balance: " + senderBalance;
+    }
+
+    @Override
+    public void logTransfer(BigDecimal amount, int receiver, int sender) {
+
+
     }
 }

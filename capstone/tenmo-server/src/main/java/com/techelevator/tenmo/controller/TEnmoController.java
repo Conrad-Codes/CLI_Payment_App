@@ -46,5 +46,4 @@ public class TEnmoController {
     public String transfer(Principal principal,@Valid @RequestBody TransactionDTO transactionDTO) {
         return transactionDao.transfer(transactionDTO.getAmount(), transactionDTO.getReceiverID(), userDao.findIdByUsername(principal.getName()));
     }
-
 }

@@ -110,7 +110,6 @@ public class App {
 	}
 
 	private void sendBucks() {
-
         User[] displayedUsers = null;
         displayedUsers = tEnmoService.listUsers();
 
@@ -119,30 +118,38 @@ public class App {
         BigDecimal amount = new BigDecimal("0.00");
         boolean keepRunning = true;
         String response = "";
-        System.out.println("\n");
+
+        System.out.println("");
+
         do{
             try {
-
+                //Display list of possible receiving users
                 for (User user : displayedUsers){
                     System.out.println(user);
                 }
-
                 System.out.println("Please enter the user ID of the receiver: ");
                 receiverID = Integer.parseInt(scanner.nextLine());
 
                 System.out.println("Please enter the amount to transfer: ");
                 amount = new BigDecimal(scanner.nextLine());
 
+                //Search the array of potential users
                 for (User user : displayedUsers){
-                    if (user.getId() == receiverID && amount.compareTo(new BigDecimal ("0.00")) >0){
+                    //Check for valid receiving ID and also that entered amount is greater than 0
+                    if (user.getId() == receiverID && amount.compareTo(new BigDecimal ("0.00")) > 0){
+
                         TransactionDTO transactionDTO = new TransactionDTO();
                         transactionDTO.setAmount(amount);
                         transactionDTO.setReceiverID(receiverID);
 
+                        //Set response message to server response
                         response = tEnmoService.transfer(transactionDTO);
+
+                        //Stop the loop
                         keepRunning = false;
                     }
                 }
+                //After iterating check response message. If blank prompt for invalid input
                 if (response.equals("")) {
                     System.out.println("\nInvalid input, please try again \n");
                 }else{

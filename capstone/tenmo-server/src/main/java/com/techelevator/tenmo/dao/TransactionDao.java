@@ -9,4 +9,6 @@ public interface TransactionDao {
 
     String transfer(BigDecimal amount, int sender, int receiver);
 
+    void logTransfer(BigDecimal amount, int sender, int receiver);
+
 }
