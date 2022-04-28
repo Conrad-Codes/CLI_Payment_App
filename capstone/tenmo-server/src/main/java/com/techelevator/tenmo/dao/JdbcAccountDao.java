@@ -38,17 +38,18 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public Map<Long, String> listUsers() {
+    public List<User> listUsers() {
+
+        List<User> users = new ArrayList<>();
 
         String sql = "SELECT * FROM tenmo_user;";
         SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql);
-        Map<Long, String> users = new HashMap<>();
 
         while(results.next()) {
-            users.put(results.getLong("user_id"), results.getString("username"));
+            users.add(userMapper(results));
         }
 
-            return users;
+        return users;
     }
 
     private Account accountMapper(SqlRowSet results) {
@@ -59,6 +60,15 @@ public class JdbcAccountDao implements AccountDao {
         account.setAccountId(results.getLong("account_id"));
 
         return account;
+    }
+
+    private User userMapper(SqlRowSet results) {
+        User user = new User();
+
+        user.setId(results.getLong("user_id"));
+        user.setUsername(results.getString("username"));
+
+        return user;
     }
 
 }

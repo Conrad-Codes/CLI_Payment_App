@@ -10,6 +10,6 @@ public interface AccountDao {
 
     BigDecimal checkBalance(Long user_id);
 
-    Map<Long, String> listUsers();
+    List<User> listUsers();
 
 }
