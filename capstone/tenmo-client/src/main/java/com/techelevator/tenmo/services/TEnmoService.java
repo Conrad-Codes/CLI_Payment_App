@@ -65,6 +65,7 @@ public class TEnmoService {
 
     public List<User> listUsers(Long user_id) {
         List<User> users = new ArrayList<>();
+        List<User> displayedUsers = new ArrayList<>();
 
         users = restTemplate.exchange(
           API_BASE_URL + "users",
@@ -72,8 +73,24 @@ public class TEnmoService {
           makeAuthEntity(),
           List.class
         ).getBody();
+//        System.out.println(users.get(0).getId().longValue());
+//        System.out.println(user_id);
+    users.removeIf(user_id <);
+        for (int i =0 ; i< users.size();i++){
+            System.out.println("DEBUG");
+//            System.out.println(currentUser);
+//            System.out.println(user);
+            if (!users.get(i).getId().equals(user_id)){
+                User user = new User();
+                user.setId(users.get(i).getId());
+                user.setUsername(users.get(i).getUsername());
 
-        return users;
+                displayedUsers.add(user);
+            }
+
+        }
+
+        return displayedUsers;
     }
 
 }

@@ -103,6 +103,7 @@ public class App {
 	}
 
 	private void sendBucks() {
+        System.out.println(currentUser.getUser());
         System.out.println(tEnmoService.listUsers(currentUser.getUser().getId()));
 		
 	}
