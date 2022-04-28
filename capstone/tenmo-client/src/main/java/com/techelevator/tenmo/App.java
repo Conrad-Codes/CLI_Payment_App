@@ -1,10 +1,14 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TEnmoService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class App {
 
@@ -89,7 +93,7 @@ public class App {
 
 	private void viewCurrentBalance() {
 		// TODO Auto-generated method stub
-        System.out.println(tEnmoService.getBalance(currentUser.getUser().getId()));
+        System.out.println(tEnmoService.getBalance());
 	}
 
 	private void viewTransferHistory() {
@@ -103,14 +107,18 @@ public class App {
 	}
 
 	private void sendBucks() {
-        System.out.println(currentUser.getUser());
-        System.out.println(tEnmoService.listUsers(currentUser.getUser().getId()));
-		
+//        System.out.println(tEnmoService.listUsers());
+
+        User[] displayedUsers = null;
+        displayedUsers = tEnmoService.listUsers();
+
+        for (User user : displayedUsers){
+            System.out.println(user);
+        }
+//        Scanner scanner = new Scanner()
 	}
 
 	private void requestBucks() {
 		// TODO Auto-generated method stub
-		
 	}
-
 }

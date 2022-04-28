@@ -8,8 +8,8 @@ import java.util.Map;
 
 public interface AccountDao {
 
-    BigDecimal checkBalance(Long user_id);
+    BigDecimal checkBalance(int user_id);
 
-    List<User> listUsers();
+    List<User> listUsers(int user_id);
 
 }

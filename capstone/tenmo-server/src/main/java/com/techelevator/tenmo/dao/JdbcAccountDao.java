@@ -24,7 +24,7 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public BigDecimal checkBalance(Long user_id) {
+    public BigDecimal checkBalance(int user_id) {
         BigDecimal balance = new BigDecimal("0.00");
 
         String sql = "SELECT * FROM account WHERE user_id = ?";
@@ -38,12 +38,12 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public List<User> listUsers() {
+    public List<User> listUsers(int user_id) {
 
         List<User> users = new ArrayList<>();
 
-        String sql = "SELECT * FROM tenmo_user;";
-        SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql);
+        String sql = "SELECT * FROM tenmo_user WHERE user_id != ?;";
+        SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, user_id);
 
         while(results.next()) {
             users.add(userMapper(results));

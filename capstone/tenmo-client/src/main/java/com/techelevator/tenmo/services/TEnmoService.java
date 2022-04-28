@@ -45,13 +45,13 @@ public class TEnmoService {
         return entity;
     }
 
-    public BigDecimal getBalance(Long user_id) {
+    public BigDecimal getBalance() {
 
         BigDecimal balance = new BigDecimal("0.00");
 
         try {
             balance = restTemplate.exchange(
-                    API_BASE_URL + "balance/" + user_id,
+                    API_BASE_URL + "balance",
                     HttpMethod.GET,
                     makeAuthEntity(),
                     BigDecimal.class
@@ -63,34 +63,17 @@ public class TEnmoService {
         return balance;
     }
 
-    public List<User> listUsers(Long user_id) {
-        List<User> users = new ArrayList<>();
-        List<User> displayedUsers = new ArrayList<>();
+    public User[] listUsers() {
+
+        User[] users = null;
 
         users = restTemplate.exchange(
           API_BASE_URL + "users",
           HttpMethod.GET,
           makeAuthEntity(),
-          List.class
+          User[].class
         ).getBody();
-//        System.out.println(users.get(0).getId().longValue());
-//        System.out.println(user_id);
-    users.removeIf(user_id <);
-        for (int i =0 ; i< users.size();i++){
-            System.out.println("DEBUG");
-//            System.out.println(currentUser);
-//            System.out.println(user);
-            if (!users.get(i).getId().equals(user_id)){
-                User user = new User();
-                user.setId(users.get(i).getId());
-                user.setUsername(users.get(i).getUsername());
 
-                displayedUsers.add(user);
-            }
-
-        }
-
-        return displayedUsers;
+        return users;
     }
-
 }
