@@ -70,19 +70,19 @@ public class TEnmoService {
         User[] users = null;
 
         users = restTemplate.exchange(
-          API_BASE_URL + "users",
-          HttpMethod.GET,
-          makeAuthEntity(),
-          User[].class
+                API_BASE_URL + "users",
+                HttpMethod.GET,
+                makeAuthEntity(),
+                User[].class
         ).getBody();
 
         return users;
     }
 
-    public String transfer(TransactionDTO transactionDTO){
+    public String transfer(TransactionDTO transactionDTO) {
         String response = "";
 
-        try{
+        try {
             response = restTemplate.exchange(
                     API_BASE_URL + "transfer",
                     HttpMethod.POST,
@@ -91,9 +91,23 @@ public class TEnmoService {
             ).getBody();
 //        }catch(MethodArgumentNotValidException e) {
 //
-        }catch(RestClientResponseException | ResourceAccessException e){
+        } catch (RestClientResponseException | ResourceAccessException e) {
             System.out.println("ERROR!");
         }
         return response;
+    }
+
+    public TransactionDTO[] transferLog() {
+
+        TransactionDTO[] transactionDTOS = null;
+
+        transactionDTOS = restTemplate.exchange(
+                API_BASE_URL + "transferlog",
+                HttpMethod.GET,
+                makeAuthEntity(),
+                TransactionDTO[].class
+        ).getBody();
+
+        return transactionDTOS;
     }
 }

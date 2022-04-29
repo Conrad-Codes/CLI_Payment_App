@@ -7,8 +7,8 @@ public class TransactionDTO {
     private int transfer_id;
     private String transfer_type_desc;
     private String transfer_status_desc;
-    private int account_from;
-    private int account_to;
+    private String account_from;
+    private String account_to;
     private BigDecimal amount;
 
 
@@ -28,11 +28,11 @@ public class TransactionDTO {
         this.transfer_id = transfer_id;
     }
 
-    public int getAccount_from() {
+    public String getAccount_from() {
         return account_from;
     }
 
-    public void setAccount_from(int account_from) {
+    public void setAccount_from(String account_from) {
         this.account_from = account_from;
     }
 
@@ -44,11 +44,11 @@ public class TransactionDTO {
         this.amount = amount;
     }
 
-    public int getAccount_to() {
+    public String getAccount_to() {
         return account_to;
     }
 
-    public void setAccount_to(int account_to) {
+    public void setAccount_to(String account_to) {
         this.account_to = account_to;
     }
 
