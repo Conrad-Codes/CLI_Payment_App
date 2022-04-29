@@ -39,7 +39,7 @@ public class App {
         int menuSelection = -1;
         while (menuSelection != 0 && currentUser == null) {
             consoleService.printLoginMenu();
-            menuSelection = consoleService.promptForMenuSelection("Please choose an option: ");
+            menuSelection = consoleService.promptForMenuSelection("Please choose an option: \n");
             if (menuSelection == 1) {
                 handleRegister();
             } else if (menuSelection == 2) {
@@ -74,7 +74,7 @@ public class App {
         int menuSelection = -1;
         while (menuSelection != 0) {
             consoleService.printMainMenu();
-            menuSelection = consoleService.promptForMenuSelection("Please choose an option: ");
+            menuSelection = consoleService.promptForMenuSelection("Please choose an option: \n");
             if (menuSelection == 1) {
                 viewCurrentBalance();
             } else if (menuSelection == 2) {
@@ -96,7 +96,7 @@ public class App {
 
     private void viewCurrentBalance() {
         // TODO Auto-generated method stub
-        System.out.println(tEnmoService.getBalance());
+        System.out.println("Your current account balance is: $" + tEnmoService.getBalance());
     }
 
     private void viewTransferHistory() {
@@ -104,7 +104,7 @@ public class App {
         log = tEnmoService.transferLog();
 
         if (log.length == 0) {
-            System.out.println("\nYou have no transfer history!");
+            System.out.println("You have no transfer history!");
             return;
         } else {
             for (TransactionDTO tDTO : log) {
@@ -114,13 +114,17 @@ public class App {
             boolean keepGoing = true;
             do {
                 try {
-                    System.out.println("Please enter transfer ID to view details (0 to cancel): ");
+                    System.out.println("\nPlease enter transfer ID to view details (0 to cancel): ");
                     choice = Integer.parseInt(scanner.nextLine());
 
                     if (choice == 0){
                         keepGoing = false;
                     }else{
-
+                        for (TransactionDTO tDTO : log) {
+                            if(tDTO.getTransfer_id() == choice) {
+                                System.out.println(tDTO.viewTransferDetails());
+                            }
+                        }
                     }
 
                 } catch (NumberFormatException e) {
@@ -152,10 +156,14 @@ public class App {
                 for (User user : displayedUsers) {
                     System.out.println(user);
                 }
-                System.out.println("Please enter the user ID of the receiver: ");
+                System.out.println("Enter ID of user you are sending to (0 to cancel):");
                 account_to_id = Integer.parseInt(scanner.nextLine());
 
-                System.out.println("Please enter the amount to transfer: ");
+                if(account_to_id == 0) {
+                    return;
+                }
+
+                System.out.println("Enter amount:");
                 amount = new BigDecimal(scanner.nextLine());
 
                 //Search the array of potential users
@@ -177,12 +185,12 @@ public class App {
                 }
                 //After iterating check response message. If blank prompt for invalid input
                 if (response.equals("")) {
-                    System.out.println("\nInvalid input, please try again \n");
+                    System.out.println("Invalid input, please try again.\n");
                 } else {
                     System.out.println(response);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("\nInvalid input, please try again\n");
+                System.out.println("Invalid input, please try again.\n");
             }
         } while (keepRunning);
     }

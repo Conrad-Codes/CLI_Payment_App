@@ -80,8 +80,11 @@ public class TransactionDTO {
     }
 
     public String viewTransferDetails(){
-        //WRITE CODE
-
-        return "";
+        String transferDetails = "--------------------------------\n" +
+                "Transfer Details\n" + "--------------------------------\n" +
+                "Id: " + transfer_id + "\nFrom: " + account_from +
+                "\nTo: " + account_to + "\nType: " + transfer_type_desc +
+                "\nStatus: " + transfer_status_desc + "\nAmount: $" + amount;
+        return transferDetails;
     }
 }
