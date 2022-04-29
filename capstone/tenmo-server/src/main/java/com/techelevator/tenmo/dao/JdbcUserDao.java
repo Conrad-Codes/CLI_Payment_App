@@ -34,14 +34,28 @@ public class JdbcUserDao implements UserDao {
     }
 
     @Override
-    public int findAccountIdByUserId(int userId) {
+    public int findAccountIdByUserId(int user_id) {
         String sql = "SELECT account_id FROM account WHERE user_id = ?;";
-         Integer accountId = jdbcTemplate.queryForObject(sql, Integer.class, userId);
+         Integer accountId = jdbcTemplate.queryForObject(sql, Integer.class, user_id);
         if (accountId != null) {
             return accountId;
         } else {
             return -1;
         }
+    }
+
+    @Override
+    public String getUsernameById(int user_id) {
+
+        String sql = "SELECT username FROM tenmo_user WHERE user_id = ?;";
+
+        String username = jdbcTemplate.queryForObject(sql, String.class, user_id);
+
+        if (username != null) {
+            return username;
+        }
+
+        return null;
     }
 
     @Override
@@ -65,6 +79,8 @@ public class JdbcUserDao implements UserDao {
         }
         throw new UsernameNotFoundException("User " + username + " was not found.");
     }
+
+
 
     @Override
     public boolean create(String username, String password) {

@@ -12,5 +12,9 @@ public interface TransactionDao {
 
     void logTransfer(BigDecimal amount, int sender, int receiver, String transfer_type, String transfer_status_desc);
 
-    TransactionDTO[] viewTransfers(int id);
+    List<TransactionDTO> viewTransfers(int id);
+
+    String getTransferTypeDesc(int transfer_type_id);
+
+    String getTransferStatusDesc(int transfer_status_id);
 }

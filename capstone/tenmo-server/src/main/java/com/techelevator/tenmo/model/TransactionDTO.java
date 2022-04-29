@@ -18,10 +18,12 @@ public class TransactionDTO {
 
     String transfer_status_desc;
 
-    private int account_from;
+    private String account_from;
+
+    private String account_to;
 
     @NotNull
-    private int account_to;
+    private int account_to_id;
 
     @Min(value = 1, message = "Amount must be greater than 0")
     @Positive
@@ -44,11 +46,11 @@ public class TransactionDTO {
         this.transfer_status_desc = transfer_status_desc;
     }
 
-    public int getAccount_from() {
+    public String getAccount_from() {
         return account_from;
     }
 
-    public void setAccount_from(int account_from) {
+    public void setAccount_from(String account_from) {
         this.account_from = account_from;
     }
 
@@ -60,12 +62,12 @@ public class TransactionDTO {
         this.amount = amount;
     }
 
-    public int getAccount_to() {
-        return account_to;
+    public int getAccount_to_id() {
+        return account_to_id;
     }
 
-    public void setAccount_to(int account_to) {
-        this.account_to = account_to;
+    public void setAccount_to_id(int account_to_id) {
+        this.account_to_id = account_to_id;
     }
 
     public String getTransfer_type_desc() {
@@ -74,5 +76,13 @@ public class TransactionDTO {
 
     public void setTransfer_type_desc(String transfer_type_desc) {
         this.transfer_type_desc = transfer_type_desc;
+    }
+
+    public String getAccount_to() {
+        return account_to;
+    }
+
+    public void setAccount_to(String account_to) {
+        this.account_to = account_to;
     }
 }

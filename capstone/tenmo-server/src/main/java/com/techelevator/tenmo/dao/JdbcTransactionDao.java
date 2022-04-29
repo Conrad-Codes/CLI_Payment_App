@@ -76,26 +76,52 @@ public class JdbcTransactionDao implements TransactionDao {
     }
 
     @Override
-    public TransactionDTO[] viewTransfers(int id) {
-        String sql = "SELECT  FROM transfer" +
-        "JOIN transfer_type ON transfer_type.transfer_type_id = transfer.transfer_type_id" +
-        "Join transfer_status ON transfer_status.transfer_status_id = transfer.transfer_status_id" +
-        "JOIN account ON account.account_id = transfer.account_from WHERE user_id = ?;";
+    public List<TransactionDTO> viewTransfers(int user_id) {
+        String sql = "SELECT * FROM transfer" +
+                "JOIN transfer_type ON transfer_type.transfer_type_id = transfer.transfer_type_id" +
+                "Join transfer_status ON transfer_status.transfer_status_id = transfer.transfer_status_id" +
+                "JOIN account ON account.account_id = transfer.account_from WHERE user_id = ?;";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, user_id);
+
+        List<TransactionDTO> transactionDTOS = new ArrayList<>();
 
         //CODE FOR STUFF
+        while (results.next()) {
+            transactionDTOS.add(transferMapper(results, user_id));
+        }
 
-
-
-        return null;
+        return transactionDTOS;
     }
 
-//    public TransactionDTO transferMapper(SqlRowSet results){
-//        TransactionDTO transactionDTO = new TransactionDTO();
-//
-//        transactionDTO.setTransfer_id(results.getInt("transfer_id"));
-//        transactionDTO.setAccount_from(results.);
-//
-//    }
+    @Override
+    public String getTransferTypeDesc(int transfer_type_id) {
+
+        String sql = "SELECT transfer_type_desc FROM transfer_type WHERE transfer_type_id = ?;";
+
+        return jdbcTemplate.queryForObject(sql, String.class, transfer_type_id);
+    }
+
+    @Override
+    public String getTransferStatusDesc(int transfer_status_id) {
+
+        String sql = "SELECT transfer_status_desc FROM transfer_status WHERE transfer_status_id = ?;";
+
+        return jdbcTemplate.queryForObject(sql, String.class, transfer_status_id);
+    }
+
+    public TransactionDTO transferMapper(SqlRowSet results, int user_id) {
+
+        TransactionDTO transactionDTO = new TransactionDTO();
+
+        transactionDTO.setTransfer_id(results.getInt("transfer_id"));
+        transactionDTO.setTransfer_type_desc(getTransferTypeDesc(results.getInt("transfer_type_id")));
+        transactionDTO.setTransfer_status_desc(getTransferStatusDesc(results.getInt("transfer_status_id")));
+        transactionDTO.setAccount_from(userDao.getUsernameById(user_id));
+        transactionDTO.setAccount_to(userDao.getUsernameById(results.getInt("account_to")));
+        transactionDTO.setAmount(results.getBigDecimal("amount"));
+        transactionDTO.setAccount_to_id(results.getInt("account_to"));
+
+        return transactionDTO;
+    }
 }

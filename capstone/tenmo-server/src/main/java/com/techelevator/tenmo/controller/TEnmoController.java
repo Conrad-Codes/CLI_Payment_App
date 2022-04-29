@@ -31,8 +31,6 @@ public class TEnmoController {
 
     @RequestMapping(path = "/balance", method = RequestMethod.GET)
     public BigDecimal getBalance(Principal principal) {
-
-
         return accountDao.checkBalance(userDao.findIdByUsername(principal.getName()));
     }
 
@@ -43,6 +41,11 @@ public class TEnmoController {
 
     @RequestMapping(path = "/transfer", method = RequestMethod.POST)
     public String transfer(Principal principal,@Valid @RequestBody TransactionDTO transactionDTO) {
-        return transactionDao.transfer(transactionDTO.getAmount(), transactionDTO.getAccount_to(), userDao.findIdByUsername(principal.getName()), transactionDTO.getTransfer_type_desc());
+        return transactionDao.transfer(transactionDTO.getAmount(), transactionDTO.getAccount_to_id(), userDao.findIdByUsername(principal.getName()), transactionDTO.getTransfer_type_desc());
+    }
+
+    @RequestMapping(path = "/transferlog", method = RequestMethod.GET)
+    public List<TransactionDTO> transferLog(Principal principal) {
+        return transactionDao.viewTransfers(userDao.findIdByUsername(principal.getName()));
     }
 }
