@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.TransactionDTO;
 import com.techelevator.tenmo.model.User;
 
 import java.math.BigDecimal;
@@ -11,4 +12,5 @@ public interface TransactionDao {
 
     void logTransfer(BigDecimal amount, int sender, int receiver, String transfer_type, String transfer_status_desc);
 
+    TransactionDTO[] viewTransfers(int id);
 }

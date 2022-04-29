@@ -9,8 +9,6 @@ import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TEnmoService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -114,7 +112,7 @@ public class App {
         displayedUsers = tEnmoService.listUsers();
 
         Scanner scanner = new Scanner(System.in);
-        int receiverID = 0;
+        int account_to = 0;
         BigDecimal amount = new BigDecimal("0.00");
         boolean keepRunning = true;
         String response = "";
@@ -128,7 +126,7 @@ public class App {
                     System.out.println(user);
                 }
                 System.out.println("Please enter the user ID of the receiver: ");
-                receiverID = Integer.parseInt(scanner.nextLine());
+                account_to = Integer.parseInt(scanner.nextLine());
 
                 System.out.println("Please enter the amount to transfer: ");
                 amount = new BigDecimal(scanner.nextLine());
@@ -136,12 +134,12 @@ public class App {
                 //Search the array of potential users
                 for (User user : displayedUsers){
                     //Check for valid receiving ID and also that entered amount is greater than 0
-                    if (user.getId() == receiverID && amount.compareTo(new BigDecimal ("0.00")) > 0){
+                    if (user.getId() == account_to && amount.compareTo(new BigDecimal ("0.00")) > 0){
 
                         TransactionDTO transactionDTO = new TransactionDTO();
                         transactionDTO.setAmount(amount);
-                        transactionDTO.setReceiverID(receiverID);
-                        transactionDTO.setTransfer_type("Send");
+                        transactionDTO.setAccount_to(account_to);
+                        transactionDTO.setTransfer_type_desc("Send");
 
                         //Set response message to server response
                         response = tEnmoService.transfer(transactionDTO);
