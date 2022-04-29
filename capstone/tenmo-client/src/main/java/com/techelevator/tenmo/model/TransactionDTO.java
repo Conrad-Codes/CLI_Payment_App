@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class TransactionDTO {
 
@@ -10,7 +11,15 @@ public class TransactionDTO {
     private String account_from;
     private String account_to;
     private BigDecimal amount;
+    private int account_to_id;
 
+    public int getAccount_to_id() {
+        return account_to_id;
+    }
+
+    public void setAccount_to_id(int account_to_id) {
+        this.account_to_id = account_to_id;
+    }
 
     public String getTransfer_status_desc() {
         return transfer_status_desc;
@@ -58,5 +67,21 @@ public class TransactionDTO {
 
     public void setTransfer_type_desc(String transfer_type_desc) {
         this.transfer_type_desc = transfer_type_desc;
+    }
+
+    public String viewTransferLog(){
+        String fromTo = "";
+        if (this.transfer_type_desc.equals("Send")){
+            fromTo = "To:   " + account_to;
+        }else {
+            fromTo = "From: " + account_from;
+        }
+        return (transfer_id + "     " + fromTo + "     $ " + amount);
+    }
+
+    public String viewTransferDetails(){
+        //WRITE CODE
+
+        return "";
     }
 }

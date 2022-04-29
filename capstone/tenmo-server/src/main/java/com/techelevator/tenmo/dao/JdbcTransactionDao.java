@@ -77,12 +77,12 @@ public class JdbcTransactionDao implements TransactionDao {
 
     @Override
     public List<TransactionDTO> viewTransfers(int user_id) {
-        String sql = "SELECT * FROM transfer" +
-                "JOIN transfer_type ON transfer_type.transfer_type_id = transfer.transfer_type_id" +
-                "Join transfer_status ON transfer_status.transfer_status_id = transfer.transfer_status_id" +
+        String sql = "SELECT * FROM transfer " +
+                "JOIN transfer_type ON transfer_type.transfer_type_id = transfer.transfer_type_id " +
+                "JOIN transfer_status ON transfer_status.transfer_status_id = transfer.transfer_status_id " +
                 "JOIN account ON account.account_id = transfer.account_from WHERE user_id = ?;";
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, user_id);
+        SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, user_id);
 
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
 
@@ -118,7 +118,7 @@ public class JdbcTransactionDao implements TransactionDao {
         transactionDTO.setTransfer_type_desc(getTransferTypeDesc(results.getInt("transfer_type_id")));
         transactionDTO.setTransfer_status_desc(getTransferStatusDesc(results.getInt("transfer_status_id")));
         transactionDTO.setAccount_from(userDao.getUsernameById(user_id));
-        transactionDTO.setAccount_to(userDao.getUsernameById(results.getInt("account_to")));
+        transactionDTO.setAccount_to(userDao.getUsernameById(userDao.findUserIdByAccountId(results.getInt("account_to"))));
         transactionDTO.setAmount(results.getBigDecimal("amount"));
         transactionDTO.setAccount_to_id(results.getInt("account_to"));
 

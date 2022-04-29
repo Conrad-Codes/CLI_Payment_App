@@ -16,5 +16,7 @@ public interface UserDao {
 
     String getUsernameById(int accountId);
 
+    int findUserIdByAccountId(int account_id);
+
     boolean create(String username, String password);
 }

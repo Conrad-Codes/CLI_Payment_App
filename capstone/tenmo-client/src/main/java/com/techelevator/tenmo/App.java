@@ -20,6 +20,7 @@ public class App {
 
     private AuthenticatedUser currentUser;
     private TEnmoService tEnmoService = new TEnmoService();
+    Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         App app = new App();
@@ -33,6 +34,7 @@ public class App {
             mainMenu();
         }
     }
+
     private void loginMenu() {
         int menuSelection = -1;
         while (menuSelection != 0 && currentUser == null) {
@@ -92,53 +94,78 @@ public class App {
         }
     }
 
-	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
+    private void viewCurrentBalance() {
+        // TODO Auto-generated method stub
         System.out.println(tEnmoService.getBalance());
-	}
+    }
 
-	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
-		
-	}
+    private void viewTransferHistory() {
+        TransactionDTO[] log = null;
+        log = tEnmoService.transferLog();
 
-	private void viewPendingRequests() {
-		// TODO Auto-generated method stub
-		
-	}
+        if (log.length == 0) {
+            System.out.println("\nYou have no transfer history!");
+            return;
+        } else {
+            for (TransactionDTO tDTO : log) {
+                System.out.println(tDTO.viewTransferLog());
+            }
+            Integer choice = 0;
+            boolean keepGoing = true;
+            do {
+                try {
+                    System.out.println("Please enter transfer ID to view details (0 to cancel): ");
+                    choice = Integer.parseInt(scanner.nextLine());
 
-	private void sendBucks() {
+                    if (choice == 0){
+                        keepGoing = false;
+                    }else{
+
+                    }
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input!");
+                }
+            }while(keepGoing);
+        }
+    }
+
+    private void viewPendingRequests() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void sendBucks() {
         User[] displayedUsers = null;
         displayedUsers = tEnmoService.listUsers();
 
-        Scanner scanner = new Scanner(System.in);
-        int account_to = 0;
+        int account_to_id = 0;
         BigDecimal amount = new BigDecimal("0.00");
         boolean keepRunning = true;
         String response = "";
 
         System.out.println("");
 
-        do{
+        do {
             try {
                 //Display list of possible receiving users
-                for (User user : displayedUsers){
+                for (User user : displayedUsers) {
                     System.out.println(user);
                 }
                 System.out.println("Please enter the user ID of the receiver: ");
-                account_to = Integer.parseInt(scanner.nextLine());
+                account_to_id = Integer.parseInt(scanner.nextLine());
 
                 System.out.println("Please enter the amount to transfer: ");
                 amount = new BigDecimal(scanner.nextLine());
 
                 //Search the array of potential users
-                for (User user : displayedUsers){
+                for (User user : displayedUsers) {
                     //Check for valid receiving ID and also that entered amount is greater than 0
-                    if (user.getId() == account_to && amount.compareTo(new BigDecimal ("0.00")) > 0){
+                    if (user.getId() == account_to_id && amount.compareTo(new BigDecimal("0.00")) > 0) {
 
                         TransactionDTO transactionDTO = new TransactionDTO();
                         transactionDTO.setAmount(amount);
-                        transactionDTO.setAccount_to(account_to);
+                        transactionDTO.setAccount_to_id(account_to_id);
                         transactionDTO.setTransfer_type_desc("Send");
 
                         //Set response message to server response
@@ -151,16 +178,16 @@ public class App {
                 //After iterating check response message. If blank prompt for invalid input
                 if (response.equals("")) {
                     System.out.println("\nInvalid input, please try again \n");
-                }else{
+                } else {
                     System.out.println(response);
                 }
-            }catch( NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.println("\nInvalid input, please try again\n");
             }
-        }while(keepRunning);
-	}
+        } while (keepRunning);
+    }
 
-	private void requestBucks() {
-		// TODO Auto-generated method stub
-	}
+    private void requestBucks() {
+        // TODO Auto-generated method stub
+    }
 }
