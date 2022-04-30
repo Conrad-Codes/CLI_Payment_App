@@ -2,6 +2,7 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.User;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,9 +47,14 @@ public class JdbcUserDao implements UserDao {
 
     public int findUserIdByAccountId(int account_id){
         String sql = "SELECT user_id FROM account WHERE account_id = ?;";
-        Integer user_id = jdbcTemplate.queryForObject(sql, Integer.class, account_id);
 
-        return user_id;
+        try{
+            Integer user_id = jdbcTemplate.queryForObject(sql, Integer.class, account_id);
+            return user_id;
+
+        }catch(EmptyResultDataAccessException | NullPointerException e){
+            return -1;
+        }
     }
 
     @Override

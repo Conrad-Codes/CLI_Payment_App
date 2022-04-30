@@ -9,6 +9,7 @@ import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TEnmoService;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Scanner;
 
 public class App {
@@ -122,7 +123,7 @@ public class App {
             do {
                 consoleService.printViewTransfers();
                 for (TransactionDTO tDTO : log) {
-                    System.out.println(tDTO.viewTransferLog());
+                    System.out.println(tDTO.viewTransferLog(currentUser.getUser().getUsername()));
                 }
                 System.out.println("---------");
                 Integer choice = 0;
@@ -140,6 +141,7 @@ public class App {
                         for (TransactionDTO tDTO : log) {
                             if (tDTO.getTransfer_id() == choice) {
                                 System.out.println(tDTO.viewTransferDetails());
+
                                 keepGoing = false;
                                 idFound = true;
                             }
@@ -191,9 +193,9 @@ public class App {
                 amount = new BigDecimal(scanner.nextLine());
 
                 //Search the array of potential users
-                for (User user : displayedUsers) {
+//                for (User user : displayedUsers) {
                     //Check for valid receiving ID and also that entered amount is greater than 0
-                    if (user.getId() == account_to_id && amount.compareTo(new BigDecimal("0.00")) > 0) {
+//                    if (user.getId() == account_to_id && amount.compareTo(new BigDecimal("0.00")) > 0) {
 
                         TransactionDTO transactionDTO = new TransactionDTO();
                         transactionDTO.setAmount(amount);
@@ -203,11 +205,12 @@ public class App {
                         //Set response message to server response
                         response = tEnmoService.transfer(transactionDTO);
 
-                        //Stop the loop
-                        keepRunning = false;
-                    }
-                }
-                //After iterating check response message. If blank prompt for invalid input
+                        if (response.contains("Transaction complete.")) {
+                            //Stop the loop
+                            keepRunning = false;
+                        }
+//                    }
+//                }
                 if (response.equals("")) {
                     System.out.println("\nInvalid input!\n");
                 } else {

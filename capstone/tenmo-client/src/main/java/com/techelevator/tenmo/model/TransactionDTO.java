@@ -1,9 +1,12 @@
 package com.techelevator.tenmo.model;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.Objects;
 
 public class TransactionDTO {
+
+    Principal principal;
 
     private int transfer_id;
     private String transfer_type_desc;
@@ -69,9 +72,9 @@ public class TransactionDTO {
         this.transfer_type_desc = transfer_type_desc;
     }
 
-    public String viewTransferLog(){
+    public String viewTransferLog(String username){
         String fromTo = "";
-        if (this.transfer_type_desc.equals("Send")){
+        if (this.account_from.equals(username)){
             fromTo = "To:   " + account_to;
         }else {
             fromTo = "From: " + account_from;

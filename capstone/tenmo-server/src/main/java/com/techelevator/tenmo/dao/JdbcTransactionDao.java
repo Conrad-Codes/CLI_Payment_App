@@ -31,14 +31,18 @@ public class JdbcTransactionDao implements TransactionDao {
     public String transfer(BigDecimal amount, int account_to, int account_from, String transfer_type_desc) {
 
         if (account_to == account_from) {
-            return "Sender cannot be receiver.";
+            return "Sender cannot be receiver.\n";
+        }
+
+        if(accountDao.checkBalance(account_to).compareTo(new BigDecimal("0.00")) == 0){
+            return "Invalid receiver account\n";
         }
 
         BigDecimal account_from_balance = accountDao.checkBalance(account_from);
         BigDecimal account_to_balance = accountDao.checkBalance(account_to);
 
         if (!(account_from_balance.compareTo(amount) >= 0)) {
-            return "Insufficient funds.";
+            return "Insufficient funds.\n";
         }
 
         account_from_balance = account_from_balance.subtract(amount);
@@ -77,12 +81,14 @@ public class JdbcTransactionDao implements TransactionDao {
 
     @Override
     public List<TransactionDTO> viewTransfers(int user_id) {
-        String sql = "SELECT * FROM transfer " +
-                "JOIN transfer_type ON transfer_type.transfer_type_id = transfer.transfer_type_id " +
-                "JOIN transfer_status ON transfer_status.transfer_status_id = transfer.transfer_status_id " +
-                "JOIN account ON account.account_id = transfer.account_from WHERE user_id = ?;";
+        String sql = "SELECT * FROM transfer WHERE account_to = ? OR account_from = ?;";
+//        String sql = "SELECT * FROM transfer " +
+//                "JOIN transfer_type ON transfer_type.transfer_type_id = transfer.transfer_type_id " +
+//                "JOIN transfer_status ON transfer_status.transfer_status_id = transfer.transfer_status_id " +
+//                "JOIN account ON account.account_id = transfer.account_from WHERE user_id = ?;";
 
-        SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, user_id);
+        int account = userDao.findAccountIdByUserId(user_id);
+        SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, account, account);
 
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
 
@@ -117,8 +123,14 @@ public class JdbcTransactionDao implements TransactionDao {
         transactionDTO.setTransfer_id(results.getInt("transfer_id"));
         transactionDTO.setTransfer_type_desc(getTransferTypeDesc(results.getInt("transfer_type_id")));
         transactionDTO.setTransfer_status_desc(getTransferStatusDesc(results.getInt("transfer_status_id")));
-        transactionDTO.setAccount_from(userDao.getUsernameById(user_id));
-        transactionDTO.setAccount_to(userDao.getUsernameById(userDao.findUserIdByAccountId(results.getInt("account_to"))));
+
+        String accountFrom = userDao.getUsernameById(userDao.findUserIdByAccountId(results.getInt("account_from")));
+        transactionDTO.setAccount_from(accountFrom);
+//        transactionDTO.setAccount_from(userDao.getUsernameById(user_id));
+
+        String accountTo = userDao.getUsernameById(userDao.findUserIdByAccountId(results.getInt("account_to")));
+        transactionDTO.setAccount_to(accountTo);
+//        transactionDTO.setAccount_to(userDao.getUsernameById(userDao.findUserIdByAccountId(results.getInt("account_to"))));
         transactionDTO.setAmount(results.getBigDecimal("amount"));
         transactionDTO.setAccount_to_id(results.getInt("account_to"));
 
