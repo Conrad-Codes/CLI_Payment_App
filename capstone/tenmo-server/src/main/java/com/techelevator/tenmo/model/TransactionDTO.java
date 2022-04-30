@@ -25,7 +25,7 @@ public class TransactionDTO {
     @NotNull
     private int account_to_id;
 
-    @Min(value = 1, message = "Amount must be greater than 0")
+//    @Min(value = 1, message = "Amount must be greater than 0")
     @Positive
     private BigDecimal amount;
 

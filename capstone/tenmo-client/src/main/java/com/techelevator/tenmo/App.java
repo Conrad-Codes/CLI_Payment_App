@@ -63,9 +63,18 @@ public class App {
     }
 
     private void handleLogin() {
-        UserCredentials credentials = consoleService.promptForCredentials();
-        currentUser = authenticationService.login(credentials);
-        tEnmoService.setAuthToken(currentUser.getToken());
+        boolean keepGoing = true;
+        do {
+            try {
+                UserCredentials credentials = consoleService.promptForCredentials();
+                currentUser = authenticationService.login(credentials);
+                tEnmoService.setAuthToken(currentUser.getToken());
+                keepGoing = false;
+            } catch (NullPointerException e) {
+                System.out.println("\nPlease enter valid credentials\n");
+            }
+        } while (keepGoing);
+
         if (currentUser == null) {
             consoleService.printErrorMessage();
         }
@@ -109,33 +118,41 @@ public class App {
             System.out.println("You have no transfer history!");
             return;
         } else {
-            consoleService.printViewTransfers();
-            for (TransactionDTO tDTO : log) {
-                System.out.println(tDTO.viewTransferLog());
-            }
-            System.out.println("---------");
-            Integer choice = 0;
             boolean keepGoing = true;
             do {
+                consoleService.printViewTransfers();
+                for (TransactionDTO tDTO : log) {
+                    System.out.println(tDTO.viewTransferLog());
+                }
+                System.out.println("---------");
+                Integer choice = 0;
+
                 try {
                     System.out.println("\nPlease enter transfer ID to view details (0 to cancel): ");
+                    System.out.print("Transfer ID: ");
                     choice = Integer.parseInt(scanner.nextLine());
+                    System.out.println();
+                    boolean idFound = false;
 
-                    if (choice == 0){
+                    if (choice == 0) {
                         keepGoing = false;
-                    }else{
+                    } else {
                         for (TransactionDTO tDTO : log) {
-                            if(tDTO.getTransfer_id() == choice) {
+                            if (tDTO.getTransfer_id() == choice) {
                                 System.out.println(tDTO.viewTransferDetails());
                                 keepGoing = false;
+                                idFound = true;
                             }
+                        }
+                        if (!idFound){
+                            System.out.println("Invalid input!\n");
                         }
                     }
 
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid input!");
+                    System.out.println("\nInvalid input!\n");
                 }
-            }while(keepGoing);
+            } while (keepGoing);
         }
     }
 
@@ -163,13 +180,14 @@ public class App {
                 }
                 System.out.println("---------");
                 System.out.println("\nEnter ID of user you are sending to (0 to cancel):");
+                System.out.print("Receiver ID: ");
                 account_to_id = Integer.parseInt(scanner.nextLine());
 
-                if(account_to_id == 0) {
+                if (account_to_id == 0) {
                     return;
                 }
                 System.out.println("\nCurrent Balance: $" + tEnmoService.getBalance());
-                System.out.println("Enter amount:");
+                System.out.print("Enter amount:");
                 amount = new BigDecimal(scanner.nextLine());
 
                 //Search the array of potential users
@@ -191,12 +209,12 @@ public class App {
                 }
                 //After iterating check response message. If blank prompt for invalid input
                 if (response.equals("")) {
-                    System.out.println("Invalid input, please try again.\n");
+                    System.out.println("\nInvalid input!\n");
                 } else {
-                    System.out.println(response);
+                    System.out.println("\n" + response);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input, please try again.\n");
+                System.out.println("\nInvalid input!\n");
             }
         } while (keepRunning);
     }

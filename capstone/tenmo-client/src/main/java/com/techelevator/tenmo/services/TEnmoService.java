@@ -92,7 +92,7 @@ public class TEnmoService {
 //        }catch(MethodArgumentNotValidException e) {
 //
         } catch (RestClientResponseException | ResourceAccessException e) {
-            System.out.println("ERROR!");
+//            System.out.println("ERROR!");
         }
         return response;
     }
