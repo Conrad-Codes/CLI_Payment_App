@@ -53,7 +53,7 @@ public class JdbcTransactionDao implements TransactionDao {
 
         logTransfer(amount, account_to, account_from, transfer_type_desc, "Approved");
 
-        return "\nTransaction complete.\nNew balance: " + account_from_balance;
+        return "\nTransaction complete.\nNew Balance: $" + account_from_balance;
     }
 
     @Override

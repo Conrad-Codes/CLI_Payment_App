@@ -76,7 +76,7 @@ public class TransactionDTO {
         }else {
             fromTo = "From: " + account_from;
         }
-        return (transfer_id + "     " + fromTo + "     $ " + amount);
+        return (transfer_id + "        " + fromTo + "             $ " + amount);
     }
 
     public String viewTransferDetails(){

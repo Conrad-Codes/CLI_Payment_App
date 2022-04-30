@@ -39,7 +39,8 @@ public class App {
         int menuSelection = -1;
         while (menuSelection != 0 && currentUser == null) {
             consoleService.printLoginMenu();
-            menuSelection = consoleService.promptForMenuSelection("Please choose an option: \n");
+            menuSelection = consoleService.promptForMenuSelection("Please choose an option: ");
+            System.out.println("");
             if (menuSelection == 1) {
                 handleRegister();
             } else if (menuSelection == 2) {
@@ -74,7 +75,8 @@ public class App {
         int menuSelection = -1;
         while (menuSelection != 0) {
             consoleService.printMainMenu();
-            menuSelection = consoleService.promptForMenuSelection("Please choose an option: \n");
+            menuSelection = consoleService.promptForMenuSelection("Please choose an option: ");
+            System.out.println("");
             if (menuSelection == 1) {
                 viewCurrentBalance();
             } else if (menuSelection == 2) {
@@ -107,9 +109,11 @@ public class App {
             System.out.println("You have no transfer history!");
             return;
         } else {
+            consoleService.printViewTransfers();
             for (TransactionDTO tDTO : log) {
                 System.out.println(tDTO.viewTransferLog());
             }
+            System.out.println("---------");
             Integer choice = 0;
             boolean keepGoing = true;
             do {
@@ -123,6 +127,7 @@ public class App {
                         for (TransactionDTO tDTO : log) {
                             if(tDTO.getTransfer_id() == choice) {
                                 System.out.println(tDTO.viewTransferDetails());
+                                keepGoing = false;
                             }
                         }
                     }
@@ -152,17 +157,18 @@ public class App {
 
         do {
             try {
-                //Display list of possible receiving users
+                consoleService.printSendBucks();
                 for (User user : displayedUsers) {
                     System.out.println(user);
                 }
-                System.out.println("Enter ID of user you are sending to (0 to cancel):");
+                System.out.println("---------");
+                System.out.println("\nEnter ID of user you are sending to (0 to cancel):");
                 account_to_id = Integer.parseInt(scanner.nextLine());
 
                 if(account_to_id == 0) {
                     return;
                 }
-
+                System.out.println("\nCurrent Balance: $" + tEnmoService.getBalance());
                 System.out.println("Enter amount:");
                 amount = new BigDecimal(scanner.nextLine());
 
