@@ -34,7 +34,7 @@ public class JdbcTransactionDao implements TransactionDao {
             return "Sender cannot be receiver.\n";
         }
 
-        if(accountDao.checkBalance(account_to).compareTo(new BigDecimal("0.00")) == 0){
+        if(accountDao.checkBalance(account_to) == null){
             return "Invalid receiver account\n";
         }
 
@@ -82,17 +82,12 @@ public class JdbcTransactionDao implements TransactionDao {
     @Override
     public List<TransactionDTO> viewTransfers(int user_id) {
         String sql = "SELECT * FROM transfer WHERE account_to = ? OR account_from = ?;";
-//        String sql = "SELECT * FROM transfer " +
-//                "JOIN transfer_type ON transfer_type.transfer_type_id = transfer.transfer_type_id " +
-//                "JOIN transfer_status ON transfer_status.transfer_status_id = transfer.transfer_status_id " +
-//                "JOIN account ON account.account_id = transfer.account_from WHERE user_id = ?;";
 
         int account = userDao.findAccountIdByUserId(user_id);
         SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, account, account);
 
         List<TransactionDTO> transactionDTOS = new ArrayList<>();
 
-        //CODE FOR STUFF
         while (results.next()) {
             transactionDTOS.add(transferMapper(results, user_id));
         }

@@ -25,7 +25,7 @@ public class JdbcAccountDao implements AccountDao {
 
     @Override
     public BigDecimal checkBalance(int user_id) {
-        BigDecimal balance = new BigDecimal("0.00");
+        BigDecimal balance = null;
 
         String sql = "SELECT * FROM account WHERE user_id = ?";
         SqlRowSet results = this.jdbcTemplate.queryForRowSet(sql, user_id);

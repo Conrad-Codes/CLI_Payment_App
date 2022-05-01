@@ -192,11 +192,6 @@ public class App {
                 System.out.print("Enter amount:");
                 amount = new BigDecimal(scanner.nextLine());
 
-                //Search the array of potential users
-//                for (User user : displayedUsers) {
-                    //Check for valid receiving ID and also that entered amount is greater than 0
-//                    if (user.getId() == account_to_id && amount.compareTo(new BigDecimal("0.00")) > 0) {
-
                         TransactionDTO transactionDTO = new TransactionDTO();
                         transactionDTO.setAmount(amount);
                         transactionDTO.setAccount_to_id(account_to_id);
@@ -209,8 +204,7 @@ public class App {
                             //Stop the loop
                             keepRunning = false;
                         }
-//                    }
-//                }
+
                 if (response.equals("")) {
                     System.out.println("\nInvalid input!\n");
                 } else {

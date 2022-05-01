@@ -16,7 +16,7 @@ public class TransactionDTO {
     @NotEmpty
     private String transfer_type_desc;
 
-    String transfer_status_desc;
+    private String transfer_status_desc;
 
     private String account_from;
 
@@ -25,10 +25,21 @@ public class TransactionDTO {
     @NotNull
     private int account_to_id;
 
-//    @Min(value = 1, message = "Amount must be greater than 0")
     @Positive
     private BigDecimal amount;
 
+    public TransactionDTO() {
+    }
+
+    public TransactionDTO(int transfer_id, String transfer_type_desc, String transfer_status_desc, String account_from, String account_to, int account_to_id, BigDecimal amount) {
+        this.transfer_id = transfer_id;
+        this.transfer_type_desc = transfer_type_desc;
+        this.transfer_status_desc = transfer_status_desc;
+        this.account_from = account_from;
+        this.account_to = account_to;
+        this.account_to_id = account_to_id;
+        this.amount = amount;
+    }
 
     public int getTransfer_id() {
         return transfer_id;
